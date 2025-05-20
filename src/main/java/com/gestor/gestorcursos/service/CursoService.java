@@ -104,4 +104,9 @@ public class CursoService {
             return null;
         }
     }
+
+    public long contarCursos(){
+        return cursoRepository.count();
+    }
+    
 }

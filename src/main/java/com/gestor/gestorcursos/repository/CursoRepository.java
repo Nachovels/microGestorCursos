@@ -7,7 +7,7 @@ import com.gestor.gestorcursos.model.entity.CursoEntity;
 
 @Repository
 public interface CursoRepository extends JpaRepository<CursoEntity, String>{
-
+    long count();
     CursoEntity findByIdCurso(String idCurso);
     Boolean existsByIdCurso(String idCurso);
     void deleteByIdCurso(String idCurso);
