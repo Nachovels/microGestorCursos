@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.gestor.gestorcursos.model.Curso;
@@ -17,11 +18,15 @@ public class CursoService {
     @Autowired
     private CursoRepository cursoRepository;
     
-    private final List<CursoEntity> cursos = new ArrayList<>();
         
-    public String crearCurso(Curso curso){
+    @SuppressWarnings("null")
+    public ResponseEntity<String> crearCurso(Curso curso){
         try {
             Boolean existe = cursoRepository.existsById(curso.getIdCurso());
+            if(curso.getIdCurso().isEmpty() || curso.getNombreCurso().isEmpty() || curso.getDescripcion().isEmpty() || curso.getInstructorAsignado().isEmpty()){
+                
+                return ResponseEntity.badRequest().body("Debe ingresar todos los campos requeridos");
+            }
             if(!existe){
                 CursoEntity cursoNuevo = new CursoEntity();
                 cursoNuevo.setIdCurso(curso.getIdCurso());
@@ -30,16 +35,18 @@ public class CursoService {
                 cursoNuevo.setInstructorAsignado(curso.getInstructorAsignado());
                 
                 cursoRepository.save(cursoNuevo);
-                
-                return "Curso creado correctamente";
             }
-            return "El curso ya existe";
+            else {
+                return ResponseEntity.status(org.springframework.http.HttpStatus.CONFLICT).body("El curso con el ID " + curso.getIdCurso() + " ya existe");
+            }
+            return ResponseEntity.created(null).body("Curso creado correctamente");
         } catch (Exception e) {
-            return "Error al crear el curso: " + e.getMessage();
+            return ResponseEntity.badRequest().body("Error al crear el curso: " + e.getMessage());
         }
     }
 
-    public String actualizarCurso(Curso curso){
+    @SuppressWarnings("null")
+    public ResponseEntity<String> actualizarCurso(Curso curso){
         try {
             Optional<CursoEntity> cursoExistente = cursoRepository.findById(curso.getIdCurso());
             if (cursoExistente.isPresent()){
@@ -49,11 +56,11 @@ public class CursoService {
                 cursoActualizado.setInstructorAsignado(curso.getInstructorAsignado());
 
                 cursoRepository.save(cursoActualizado);
-                return "Curso actualizado correctamente";
+                return ResponseEntity.created(null).body("Curso actualizado correctamente");
             }
-            return "";
+            return ResponseEntity.notFound().build();
         } catch (Exception e) {
-            return "Error al actualizar el curso: " + e.getMessage();
+            return ResponseEntity.badRequest().body("Error al actualizar el curso: " + e.getMessage());
         }
     }
 
@@ -73,7 +80,7 @@ public class CursoService {
         return cursoRepository.findAll();
     }
 
-    public Curso obtenerCurso(String idCurso){
+    public ResponseEntity<String> obtenerCurso(String idCurso){
         try {
             CursoEntity curso = cursoRepository.findByIdCurso(idCurso);
             if (curso!=null){
@@ -83,11 +90,11 @@ public class CursoService {
                     curso.getDescripcion(),
                     curso.getInstructorAsignado()
                 );
-                return cursoNuevo;
+                return ResponseEntity.ok(cursoNuevo.toString());
             }
-            return null;
+            return ResponseEntity.notFound().build();
         } catch (Exception e) {
-            return null;
+            return ResponseEntity.badRequest().body("Error al obtener el curso: " + e.getMessage());
         }
     }
 

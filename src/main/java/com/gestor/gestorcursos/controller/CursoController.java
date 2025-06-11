@@ -35,19 +35,13 @@ public class CursoController {
     @Operation(summary = "Crear un nuevo curso")
     @PostMapping("/crearCurso")
     public ResponseEntity<String> crearCurso(@RequestBody Curso curso){
-        return ResponseEntity.ok(cursoService.crearCurso(curso));
+        return cursoService.crearCurso(curso);
     }
 
     @Operation(summary = "Actualizar un curso existente")
     @PutMapping("/actualizarCurso")
     public ResponseEntity<String> actualizarCurso(@RequestBody Curso curso){
-        String actualizar = cursoService.actualizarCurso(curso);
-        switch (actualizar) {
-            case "":
-                return ResponseEntity.badRequest().body("El curso no existe");
-            default:
-                return ResponseEntity.ok(actualizar);
-        }
+        return cursoService.actualizarCurso(curso);
     }
 
     @Operation(summary = "Eliminar un curso existente")
@@ -64,13 +58,8 @@ public class CursoController {
 
     @Operation(summary = "Obtener un curso por su ID")
     @GetMapping("/cursos/{idCurso}")
-        public ResponseEntity<Curso> traerCurso(@PathVariable String idCurso){
-            Curso curso = cursoService.obtenerCurso(idCurso);
-            if (curso != null) {
-                return ResponseEntity.ok(curso);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+        public ResponseEntity<String> traerCurso(@PathVariable String idCurso){
+            return cursoService.obtenerCurso(idCurso);
         }
     
     @Operation(summary = "Obtener un curso DTO por su ID")
