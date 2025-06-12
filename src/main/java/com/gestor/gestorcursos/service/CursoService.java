@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -64,20 +65,32 @@ public class CursoService {
         }
     }
 
-    public String eliminarCurso(String idCurso){
+    public ResponseEntity<String> eliminarCurso(String idCurso){
         try {
             if(cursoRepository.existsById(idCurso)){
                 cursoRepository.deleteById(idCurso);
-                return "Curso eliminado correctamente";
+                return ResponseEntity.ok("Curso eliminado correctamente");
             }
-            return "El curso no existe";
+            return ResponseEntity.notFound().build();
         } catch (Exception e) {
-            return "Error al eliminar el curso: "+ e.getMessage();
+            return ResponseEntity.badRequest().body("Error al eliminar el curso: " + e.getMessage());
         }
     }
 
-    public List<CursoEntity> obtenerCursos(){
-        return cursoRepository.findAll();
+    //public List<CursoEntity> obtenerCursos(){
+    //    return cursoRepository.findAll();
+    //}
+
+    public ResponseEntity<List<CursoEntity>> obtenerCursos(){
+        try {
+            List<CursoEntity> cursos = cursoRepository.findAll();
+            if (cursos.isEmpty()) {
+                return ResponseEntity.noContent().header("Mensaje", "No se encontró data").build();
+            }
+            return ResponseEntity.ok(cursos);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
     public ResponseEntity<String> obtenerCurso(String idCurso){

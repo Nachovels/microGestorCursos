@@ -47,12 +47,12 @@ public class CursoController {
     @Operation(summary = "Eliminar un curso existente")
     @DeleteMapping("/eliminarCurso/{idCurso}")
     public ResponseEntity<String> eliminarCurso(@PathVariable String idCurso){
-        return ResponseEntity.ok(cursoService.eliminarCurso(idCurso));
+        return cursoService.eliminarCurso(idCurso);
     }
 
     @Operation(summary = "Obtener todos los cursos existentes")
     @GetMapping("/cursos")
-    public List<CursoEntity> obtenerCursos(){
+    public ResponseEntity<List<CursoEntity>> obtenerCursos(){
         return cursoService.obtenerCursos();
     }
 
