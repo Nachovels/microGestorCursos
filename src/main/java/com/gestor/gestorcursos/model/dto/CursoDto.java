@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CursoDto {
-    private String idCurso, nombreCurso, descripcion;
+    private String nombreCurso, descripcion, instructorAsignado;
+
     
 }

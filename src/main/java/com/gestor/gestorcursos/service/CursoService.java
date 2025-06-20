@@ -1,11 +1,10 @@
 package com.gestor.gestorcursos.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -93,7 +92,7 @@ public class CursoService {
         }
     }
 
-    public ResponseEntity<String> obtenerCurso(String idCurso){
+    public ResponseEntity<String> obtenerCursoId(String idCurso){
         try {
             CursoEntity curso = cursoRepository.findByIdCurso(idCurso);
             if (curso!=null){
@@ -105,7 +104,7 @@ public class CursoService {
                 );
                 return ResponseEntity.ok(cursoNuevo.toString());
             }
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Curso no encontrado con el ID: " + idCurso);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error al obtener el curso: " + e.getMessage());
         }

@@ -2,7 +2,7 @@ package com.gestor.gestorcursos.controller;
 
 import java.util.List;
 
-import org.apache.catalina.connector.Response;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -59,7 +59,7 @@ public class CursoController {
     @Operation(summary = "Obtener un curso por su ID")
     @GetMapping("/cursos/{idCurso}")
         public ResponseEntity<String> traerCurso(@PathVariable String idCurso){
-            return cursoService.obtenerCurso(idCurso);
+            return cursoService.obtenerCursoId(idCurso);
         }
     
     @Operation(summary = "Obtener un curso DTO por su ID")
