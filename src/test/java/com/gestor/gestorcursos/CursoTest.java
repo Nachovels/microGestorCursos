@@ -6,7 +6,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.List;
 
-import org.apache.catalina.connector.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -133,7 +132,14 @@ public class CursoTest {
         when(cursoRepository.existsById("A1")).thenReturn(true);
         CursoDto result = cursoService.obtenerCursoDto("A1");
         assertNotNull(result);
-        assertEquals("Curso de prueba para testing", result.getNombreCurso());
+        assertEquals("Curso de prueba", result.getNombreCurso());
         
+    }
+
+    @Test
+    public void testObtenerCursoDtoNoExistente() {
+        when(cursoRepository.findByIdCurso("A2")).thenReturn(null);
+        CursoDto result = cursoService.obtenerCursoDto("A2");
+        assertEquals(null, result);
     }
 }
