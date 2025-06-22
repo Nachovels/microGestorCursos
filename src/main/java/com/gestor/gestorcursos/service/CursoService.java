@@ -76,10 +76,6 @@ public class CursoService {
         }
     }
 
-    //public List<CursoEntity> obtenerCursos(){
-    //    return cursoRepository.findAll();
-    //}
-
     public ResponseEntity<List<CursoEntity>> obtenerCursos(){
         try {
             List<CursoEntity> cursos = cursoRepository.findAll();
