@@ -2,6 +2,7 @@ package com.gestor.gestorcursos.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -122,6 +123,18 @@ public class CursoService {
 
     public long contarCursos(){
         return cursoRepository.count();
+    }
+
+    public List<Curso> obtenerCursosPorIds(List<String> ids) {
+        List<CursoEntity> entidades = cursoRepository.findAllById(ids);
+
+        return entidades.stream().map(entidad -> {
+            Curso curso = new Curso();
+            curso.setIdCurso(entidad.getIdCurso());
+            curso.setNombreCurso(entidad.getNombreCurso());
+            curso.setDescripcion(entidad.getDescripcion());
+            return curso;
+        }).collect(Collectors.toList());
     }
     
 }

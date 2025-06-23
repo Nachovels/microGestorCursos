@@ -1,7 +1,7 @@
 package com.gestor.gestorcursos.controller;
 
 import java.util.List;
-
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -75,4 +75,13 @@ public class CursoController {
         public long contarCursos(){
             return cursoService.contarCursos();
         }
+
+    @PostMapping("/cursos/lista")
+    public ResponseEntity<List<Curso>> obtenerCursosPorIds(@RequestBody List<String> ids) {
+        System.out.println("IDs recibidos: " + ids);
+        List<Curso> cursos = cursoService.obtenerCursosPorIds(ids);
+        System.out.println("Cursos encontrados: " + cursos.size());
+        return ResponseEntity.ok(cursos);
+    }
+
 }
